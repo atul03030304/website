@@ -6,7 +6,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/hshar/website.git'
+                    url: 'https://github.com/atul03030304/website.git'
             }
         }
 
