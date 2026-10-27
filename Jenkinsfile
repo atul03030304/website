@@ -1,5 +1,10 @@
+```groovy
 pipeline {
     agent any
+
+    environment {
+        DOCKER_IMAGE = 'atul03030304/intellipaat-website:v1'
+    }
 
     stages {
         stage('Checkout Code') {
@@ -11,14 +16,25 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t intellipaat-website:v1 .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
-        stage('Verify Docker Image') {
+        stage('Push Image to Docker Hub') {
             steps {
-                sh 'docker images intellipaat-website'
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_TOKEN'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                        docker push "$DOCKER_IMAGE"
+                        docker logout
+                    '''
+                }
             }
         }
     }
 }
+```
