@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intellipaat-website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: intellipaat-website
+  template:
+    metadata:
+      labels:
+        app: intellipaat-website
+    spec:
+      containers:
+        - name: website
+          image: atul03030304/intellipaat-website:v1
+          ports:
+            - containerPort: 80
