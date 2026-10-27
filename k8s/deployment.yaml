@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: website
-          image: atul03030304/intellipaat-website:v1
+          image: image: atul03030304/intellipaat-website:12
           ports:
             - containerPort: 80
