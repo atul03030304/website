@@ -1,9 +1,9 @@
 * name: Apply Kubernetes Deployment
-  command: kubectl apply -f k8s/deployment.yaml
+  command: sudo k3s kubectl apply -f k8s/deployment.yaml
   args:
-  chdir: "{{ playbook_dir }}/../.."
+  chdir: "{{ playbook_dir }}/.."
 
 * name: Apply Kubernetes Service
-  command: kubectl apply -f k8s/service.yaml
+  command: sudo k3s kubectl apply -f k8s/service.yaml
   args:
-  chdir: "{{ playbook_dir }}/../.."
+  chdir: "{{ playbook_dir }}/.."
