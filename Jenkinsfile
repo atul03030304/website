@@ -41,7 +41,7 @@ pipeline {
             steps {
                 sh '''
                     export KUBECONFIG=/var/lib/jenkins/.kube/config
-                    kubectl set image deployment/intellipaat-website intellipaat-website=$DOCKER_IMAGE:$BUILD_NUMBER
+                    kubectl set image deployment/intellipaat-website website=$DOCKER_IMAGE:$BUILD_NUMBER
                     kubectl rollout status deployment/intellipaat-website --timeout=180s
                 '''
             }
