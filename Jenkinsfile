@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'atul03030304/intellipaat-website:v1'
+        DOCKER_IMAGE = 'atul03030304/intellipaat-website'
     }
 
     stages {
@@ -15,7 +15,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh '''
+                    docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
+                '''
             }
         }
 
@@ -28,10 +30,20 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
-                        docker push "$DOCKER_IMAGE"
+                        docker push "$DOCKER_IMAGE:$BUILD_NUMBER"
                         docker logout
                     '''
                 }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    export KUBECONFIG=/var/lib/jenkins/.kube/config
+                    kubectl set image deployment/intellipaat-website intellipaat-website=$DOCKER_IMAGE:$BUILD_NUMBER
+                    kubectl rollout status deployment/intellipaat-website --timeout=180s
+                '''
             }
         }
     }
